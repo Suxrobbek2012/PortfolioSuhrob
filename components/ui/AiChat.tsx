@@ -3,6 +3,7 @@
 import { useState, useRef, useEffect, useCallback } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { X, Send, Loader2, Bot, User, Minimize2, Maximize2, RefreshCw } from 'lucide-react'
+import { useLanguage } from '@/components/layout/LanguageProvider'
 
 type Lang = 'uz' | 'ru' | 'en'
 
@@ -35,9 +36,10 @@ const GREETINGS: Record<Lang, string> = {
 }
 
 export function AiChat() {
+  const { lang: siteLang } = useLanguage()
   const [open, setOpen] = useState(false)
   const [minimized, setMinimized] = useState(false)
-  const [lang, setLang] = useState<Lang>('en')
+  const [lang, setLang] = useState<Lang>(siteLang)
   const [messages, setMessages] = useState<Message[]>([])
   const [input, setInput] = useState('')
   const [loading, setLoading] = useState(false)
@@ -45,6 +47,11 @@ export function AiChat() {
   const [unread, setUnread] = useState(0)
   const messagesEndRef = useRef<HTMLDivElement>(null)
   const inputRef = useRef<HTMLInputElement>(null)
+
+  // Sync with global site language switcher
+  useEffect(() => {
+    setLang(siteLang)
+  }, [siteLang])
 
   // Init greeting based on lang
   useEffect(() => {

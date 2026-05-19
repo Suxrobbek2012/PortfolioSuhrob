@@ -1,12 +1,13 @@
 'use client'
 
-import { useState, useRef, useEffect } from 'react'
+import { useState, useRef, useEffect, useMemo } from 'react'
 import { motion, useInView, AnimatePresence, LayoutGroup } from 'framer-motion'
 import { ExternalLink, GitBranch, Star, X, Eye } from 'lucide-react'
 import Link from 'next/link'
 import { ProjectComments } from '@/components/ui/ProjectComments'
 import { useTranslations } from '@/hooks/useTranslations'
 import { projectExternalHref } from '@/lib/utils'
+import { localizeProject } from '@/lib/locale-content'
 
 interface Project {
   id: string
@@ -52,7 +53,8 @@ function useProjectView(projectId: string, isOpen: boolean) {
 }
 
 function ProjectModal({ project, onClose }: { project: Project; onClose: () => void }) {
-  const { t } = useTranslations()
+  const { t, lang } = useTranslations()
+  const localized = useMemo(() => localizeProject(project, lang), [project, lang])
   const views = useProjectView(project.id, true)
 
   return (
@@ -82,7 +84,7 @@ function ProjectModal({ project, onClose }: { project: Project; onClose: () => v
             {project.image ? (
               <img
                 src={project.image}
-                alt={project.title}
+                alt={localized.title}
                 className="w-full h-full object-cover"
               />
             ) : (
@@ -122,7 +124,7 @@ function ProjectModal({ project, onClose }: { project: Project; onClose: () => v
           <div className="p-6">
             <div className="flex items-start justify-between mb-3">
               <h3 className="text-2xl font-bold" style={{ color: 'var(--foreground)' }}>
-                {project.title}
+                {localized.title}
               </h3>
               {/* View count */}
               {views !== null && (
@@ -141,7 +143,7 @@ function ProjectModal({ project, onClose }: { project: Project; onClose: () => v
             </div>
 
             <p className="text-sm leading-relaxed mb-4" style={{ color: 'var(--muted)' }}>
-              {project.longDesc || project.description}
+              {localized.longDesc || localized.description}
             </p>
 
             {/* Tags */}
@@ -204,7 +206,8 @@ function ProjectModal({ project, onClose }: { project: Project; onClose: () => v
 }
 
 function ProjectCard({ project, index }: { project: Project; index: number }) {
-  const { t } = useTranslations()
+  const { t, lang } = useTranslations()
+  const localized = useMemo(() => localizeProject(project, lang), [project, lang])
   const [hovered, setHovered] = useState(false)
   const [selected, setSelected] = useState(false)
   const views = useProjectView(project.id, false)
@@ -234,7 +237,7 @@ function ProjectCard({ project, index }: { project: Project; index: number }) {
           {project.image ? (
             <img
               src={project.image}
-              alt={project.title}
+              alt={localized.title}
               className="w-full h-full object-cover transition-transform duration-500"
               style={{ transform: hovered ? 'scale(1.08)' : 'scale(1)' }}
             />
@@ -295,7 +298,7 @@ function ProjectCard({ project, index }: { project: Project; index: number }) {
         <div className="p-4">
           <div className="flex items-start justify-between mb-1.5">
             <h3 className="font-bold text-base" style={{ color: 'var(--foreground)' }}>
-              {project.title}
+              {localized.title}
             </h3>
             {/* View count */}
             {views !== null && views > 0 && (
@@ -310,7 +313,7 @@ function ProjectCard({ project, index }: { project: Project; index: number }) {
           </div>
 
           <p className="text-xs leading-relaxed mb-3 line-clamp-2" style={{ color: 'var(--muted)' }}>
-            {project.description}
+            {localized.description}
           </p>
 
           {/* Tags */}

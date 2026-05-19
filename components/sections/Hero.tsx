@@ -7,6 +7,7 @@ import dynamic from 'next/dynamic'
 import Link from 'next/link'
 import { TechIcons } from '@/components/ui/TechIcons'
 import { useTranslations } from '@/hooks/useTranslations'
+import { useLocalizedSettings } from '@/hooks/useLocalizedSettings'
 import { safeHref } from '@/lib/utils'
 
 const Hero3D = dynamic(() => import('@/components/three/Hero3D').then((m) => m.Hero3D), {
@@ -73,6 +74,7 @@ interface HeroSectionProps {
 
 export function HeroSection({ settings }: HeroSectionProps) {
   const { t } = useTranslations()
+  const localized = useLocalizedSettings(settings)
   const roles = useMemo(
     () => [t('heroRole1'), t('heroRole2'), t('heroRole3'), t('heroRole4')],
     [t]
@@ -163,7 +165,7 @@ export function HeroSection({ settings }: HeroSectionProps) {
               animation: 'glitch 4s ease-in-out infinite',
             }}
           >
-            {settings.name || 'Suhrobbek Baxtiyorov'}
+            {localized.name}
           </motion.h1>
 
           {/* Typing Role */}
@@ -177,7 +179,7 @@ export function HeroSection({ settings }: HeroSectionProps) {
             className="max-w-2xl text-base md:text-lg leading-relaxed"
             style={{ color: 'var(--muted)' }}
           >
-            {settings.bio || t('heroBioDefault')}
+            {localized.bio}
           </motion.p>
 
           {/* Location */}
@@ -190,7 +192,7 @@ export function HeroSection({ settings }: HeroSectionProps) {
               <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z"/>
               <circle cx="12" cy="9" r="2.5"/>
             </svg>
-            {settings.location || 'Tashkent, Uzbekistan'}
+            {localized.location}
           </motion.div>
 
           {/* CTA Buttons */}
@@ -241,12 +243,12 @@ export function HeroSection({ settings }: HeroSectionProps) {
           {/* Social Links */}
           <motion.div variants={itemVariants} className="flex items-center gap-4">
             {[
-              { href: safeHref(settings.github, '#'), icon: GitBranch, label: 'GitHub' },
-              { href: safeHref(settings.linkedin, '#'), icon: ExternalLink, label: 'LinkedIn' },
+              { href: safeHref(localized.github, '#'), icon: GitBranch, label: 'GitHub' },
+              { href: safeHref(localized.linkedin, '#'), icon: ExternalLink, label: 'LinkedIn' },
               {
                 href: safeHref(
-                  settings.email?.trim()
-                    ? `mailto:${settings.email.trim()}`
+                  localized.email?.trim()
+                    ? `mailto:${localized.email.trim()}`
                     : 'mailto:suhrobbek@portfolio.dev',
                   '#'
                 ),

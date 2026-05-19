@@ -1,9 +1,10 @@
 'use client'
 
-import { useRef } from 'react'
+import { useRef, useMemo } from 'react'
 import { motion, useInView, useScroll, useTransform } from 'framer-motion'
 import { Briefcase, MapPin, Calendar } from 'lucide-react'
 import { useTranslations } from '@/hooks/useTranslations'
+import { localizeExperience } from '@/lib/locale-content'
 
 interface Experience {
   id: string
@@ -24,7 +25,8 @@ function TimelineEntry({
   exp: Experience
   index: number
 }) {
-  const { t } = useTranslations()
+  const { t, lang } = useTranslations()
+  const localized = useMemo(() => localizeExperience(exp, lang), [exp, lang])
   const ref = useRef<HTMLDivElement>(null)
   const inView = useInView(ref, { once: true, margin: '-80px' })
   const isLeft = index % 2 === 0
@@ -56,10 +58,10 @@ function TimelineEntry({
             </div>
             <div className={isLeft ? 'text-right' : 'text-left'}>
               <h3 className="font-bold text-lg" style={{ color: 'var(--foreground)' }}>
-                {exp.title}
+                {localized.title}
               </h3>
               <p className="font-semibold text-sm" style={{ color: 'var(--accent)' }}>
-                {exp.company}
+                {localized.company}
               </p>
             </div>
           </div>
@@ -73,16 +75,16 @@ function TimelineEntry({
               <Calendar size={11} />
               {exp.startDate} — {exp.current ? t('present') : exp.endDate}
             </span>
-            {exp.location && (
+            {localized.location && (
               <span className="flex items-center gap-1">
                 <MapPin size={11} />
-                {exp.location}
+                {localized.location}
               </span>
             )}
           </div>
 
           <p className="text-sm leading-relaxed" style={{ color: 'var(--muted)' }}>
-            {exp.description}
+            {localized.description}
           </p>
 
           {exp.current && (

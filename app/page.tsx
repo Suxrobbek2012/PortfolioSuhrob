@@ -37,7 +37,7 @@ export default async function HomePage() {
       <ProjectsSection projects={projects} />
       <SkillsSection skills={skills} />
       <TimelineSection experience={experience} />
-      <ContactSection />
+      <ContactSection settings={settings} />
     </>
   )
 }

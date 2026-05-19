@@ -2,10 +2,11 @@ import type { Metadata } from 'next'
 import { notFound } from 'next/navigation'
 import { getPostBySlug, getAllPosts } from '@/lib/mdx'
 import { MDXRemote } from 'next-mdx-remote/rsc'
-import { formatDate, safeHref } from '@/lib/utils'
-import { Calendar, Clock, ArrowLeft, Tag } from 'lucide-react'
-import Link from 'next/link'
+import { formatDate } from '@/lib/utils'
+import { Calendar, Tag } from 'lucide-react'
 import { ReadingProgress } from '@/components/ui/ReadingProgress'
+import { LocalizedBackLink } from '@/components/ui/LocalizedBackLink'
+import { BlogReadTime } from '@/components/ui/BlogReadTime'
 
 interface Props {
   params: { slug?: string }
@@ -68,14 +69,7 @@ export default function BlogPostPage({ params }: Props) {
       <article className="min-h-screen pt-24 pb-16 px-6">
         <div className="max-w-3xl mx-auto">
           {/* Back */}
-          <Link
-            href={safeHref('/blog', '/')}
-            className="inline-flex items-center gap-2 text-sm mb-8 transition-colors hover:text-[var(--accent)]"
-            style={{ color: 'var(--muted)' }}
-          >
-            <ArrowLeft size={16} />
-            Back to Blog
-          </Link>
+          <LocalizedBackLink />
 
           {/* Header */}
           <header className="mb-12">
@@ -108,10 +102,7 @@ export default function BlogPostPage({ params }: Props) {
                 <Calendar size={14} />
                 {formatDate(post.date)}
               </span>
-              <span className="flex items-center gap-1.5">
-                <Clock size={14} />
-                {post.readTime} min read
-              </span>
+              <BlogReadTime minutes={post.readTime} />
             </div>
 
             <div

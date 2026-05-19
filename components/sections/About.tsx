@@ -5,6 +5,7 @@ import { motion, useInView } from 'framer-motion'
 import { Download, MapPin, Mail, Calendar } from 'lucide-react'
 import Link from 'next/link'
 import { useTranslations } from '@/hooks/useTranslations'
+import { useLocalizedSettings } from '@/hooks/useLocalizedSettings'
 
 function CounterStat({ value, label, suffix = '+' }: { value: number; label: string; suffix?: string }) {
   const [count, setCount] = useState(0)
@@ -43,6 +44,7 @@ interface AboutSectionProps {
 
 export function AboutSection({ settings }: AboutSectionProps) {
   const { t, tf } = useTranslations()
+  const localized = useLocalizedSettings(settings)
   const ref = useRef<HTMLDivElement>(null)
   const inView = useInView(ref, { once: true, margin: '-100px' })
 
@@ -120,7 +122,7 @@ export function AboutSection({ settings }: AboutSectionProps) {
               className="text-base leading-relaxed"
               style={{ color: 'var(--muted)' }}
             >
-              {settings.bio || t('heroBioDefault')}
+              {localized.bio}
             </motion.p>
 
             <motion.p
@@ -128,15 +130,15 @@ export function AboutSection({ settings }: AboutSectionProps) {
               className="text-base leading-relaxed"
               style={{ color: 'var(--muted)' }}
             >
-              {tf('aboutSecondParagraph', { years: settings.yearsExperience || '5' })}
+              {tf('aboutSecondParagraph', { years: localized.yearsExperience })}
             </motion.p>
 
             {/* Info Grid */}
             <motion.div variants={itemVariants} className="grid grid-cols-1 sm:grid-cols-2 gap-3">
               {[
-                { icon: MapPin, label: t('location'), value: settings.location || 'Tashkent, Uzbekistan' },
-                { icon: Mail, label: t('email'), value: settings.email || 'suhrobbek@portfolio.dev' },
-                { icon: Calendar, label: t('expLabel'), value: `${settings.yearsExperience || '5'}+` },
+                { icon: MapPin, label: t('location'), value: localized.location },
+                { icon: Mail, label: t('email'), value: localized.email },
+                { icon: Calendar, label: t('expLabel'), value: `${localized.yearsExperience}+` },
               ].map(({ icon: Icon, label, value }) => (
                 <div
                   key={label}
@@ -183,10 +185,10 @@ export function AboutSection({ settings }: AboutSectionProps) {
             className="mt-20 grid grid-cols-2 md:grid-cols-4 gap-8 p-8 rounded-2xl"
             style={{ background: 'var(--surface)', border: '1px solid var(--border)' }}
           >
-            <CounterStat value={parseInt(settings.yearsExperience || '5')} label={t('aboutStatYears')} suffix="+" />
-            <CounterStat value={parseInt(settings.projectsCompleted || '50')} label={t('aboutStatProjects')} suffix="+" />
-            <CounterStat value={parseInt(settings.happyClients || '30')} label={t('aboutStatClients')} suffix="+" />
-            <CounterStat value={parseInt(settings.coffeeConsumed || '1000')} label={t('aboutStatCoffee')} suffix="+" />
+            <CounterStat value={parseInt(localized.yearsExperience)} label={t('aboutStatYears')} suffix="+" />
+            <CounterStat value={parseInt(localized.projectsCompleted)} label={t('aboutStatProjects')} suffix="+" />
+            <CounterStat value={parseInt(localized.happyClients)} label={t('aboutStatClients')} suffix="+" />
+            <CounterStat value={parseInt(localized.coffeeConsumed)} label={t('aboutStatCoffee')} suffix="+" />
           </motion.div>
       </div>
     </section>

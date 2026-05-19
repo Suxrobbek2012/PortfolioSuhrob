@@ -5,6 +5,8 @@ import { motion, useInView, AnimatePresence } from 'framer-motion'
 import { Send, Mail, MapPin, GitBranch, ExternalLink, Check, Loader2 } from 'lucide-react'
 import toast from 'react-hot-toast'
 import { useTranslations } from '@/hooks/useTranslations'
+import { useLocalizedSettings } from '@/hooks/useLocalizedSettings'
+import { safeHref } from '@/lib/utils'
 
 type FormState = 'idle' | 'loading' | 'success' | 'error'
 
@@ -97,8 +99,9 @@ function FloatingTextarea({
   )
 }
 
-export function ContactSection() {
+export function ContactSection({ settings = {} }: { settings?: Record<string, string> }) {
   const { t } = useTranslations()
+  const localized = useLocalizedSettings(settings)
   const ref = useRef<HTMLDivElement>(null)
   const inView = useInView(ref, { once: true, margin: '-100px' })
   const formRef = useRef<HTMLFormElement>(null)
@@ -179,8 +182,8 @@ export function ContactSection() {
             </div>
 
             {[
-              { icon: Mail, label: t('email'), value: 'suhrobbek@portfolio.dev' },
-              { icon: MapPin, label: t('location'), value: 'Tashkent, Uzbekistan' },
+              { icon: Mail, label: t('email'), value: localized.email },
+              { icon: MapPin, label: t('location'), value: localized.location },
             ].map(({ icon: Icon, label, value }) => (
               <div key={label} className="flex items-center gap-4">
                 <div
@@ -199,8 +202,8 @@ export function ContactSection() {
             {/* Social */}
             <div className="flex gap-3 mt-4">
               {[
-                { href: 'https://github.com/suhrobbek', icon: GitBranch },
-                { href: 'https://linkedin.com/in/suhrobbek', icon: ExternalLink },
+                { href: safeHref(localized.github, '#'), icon: GitBranch },
+                { href: safeHref(localized.linkedin, '#'), icon: ExternalLink },
               ].map(({ href, icon: Icon }) => (
                 <a
                   key={href}

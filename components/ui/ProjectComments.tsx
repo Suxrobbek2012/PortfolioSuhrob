@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { MessageCircle, Send, Loader2, User, Clock } from 'lucide-react'
 import { formatDate } from '@/lib/utils'
+import { useTranslations } from '@/hooks/useTranslations'
 
 interface Comment {
   id: string
@@ -17,6 +18,7 @@ interface ProjectCommentsProps {
 }
 
 export function ProjectComments({ projectId }: ProjectCommentsProps) {
+  const { t } = useTranslations()
   const [comments, setComments] = useState<Comment[]>([])
   const [loading, setLoading] = useState(true)
   const [submitting, setSubmitting] = useState(false)
@@ -58,7 +60,7 @@ export function ProjectComments({ projectId }: ProjectCommentsProps) {
       const data = await res.json()
 
       if (!res.ok) {
-        setError(data.error || 'Failed to post comment')
+        setError(data.error || t('commentsError'))
         return
       }
 
@@ -69,7 +71,7 @@ export function ProjectComments({ projectId }: ProjectCommentsProps) {
       // Refresh comments
       await fetchComments()
     } catch {
-      setError('Connection error. Please try again.')
+      setError(t('commentsConnectionError'))
     } finally {
       setSubmitting(false)
     }
@@ -82,7 +84,7 @@ export function ProjectComments({ projectId }: ProjectCommentsProps) {
         <div className="flex items-center gap-2">
           <MessageCircle size={18} style={{ color: 'var(--accent)' }} />
           <h3 className="font-bold text-lg" style={{ color: 'var(--foreground)' }}>
-            Comments
+            {t('commentsTitle')}
             {comments.length > 0 && (
               <span
                 className="ml-2 text-sm font-normal px-2 py-0.5 rounded-full"
@@ -105,7 +107,7 @@ export function ProjectComments({ projectId }: ProjectCommentsProps) {
           }}
         >
           <MessageCircle size={14} />
-          {showForm ? 'Cancel' : 'Add Comment'}
+          {showForm ? t('commentsCancel') : t('commentsAdd')}
         </motion.button>
       </div>
 
@@ -124,7 +126,7 @@ export function ProjectComments({ projectId }: ProjectCommentsProps) {
             }}
           >
             <span className="w-2 h-2 rounded-full bg-green-500" />
-            Comment posted successfully!
+            {t('commentsSuccess')}
           </motion.div>
         )}
       </AnimatePresence>
@@ -143,7 +145,7 @@ export function ProjectComments({ projectId }: ProjectCommentsProps) {
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
               <div>
                 <label className="block text-xs font-medium mb-1" style={{ color: 'var(--muted)' }}>
-                  Name *
+                  {t('commentsName')} *
                 </label>
                 <input
                   type="text"
@@ -164,7 +166,7 @@ export function ProjectComments({ projectId }: ProjectCommentsProps) {
               </div>
               <div>
                 <label className="block text-xs font-medium mb-1" style={{ color: 'var(--muted)' }}>
-                  Email (optional)
+                  {t('commentsEmail')}
                 </label>
                 <input
                   type="email"
@@ -186,7 +188,7 @@ export function ProjectComments({ projectId }: ProjectCommentsProps) {
 
             <div>
               <label className="block text-xs font-medium mb-1" style={{ color: 'var(--muted)' }}>
-                Comment *
+                {t('commentsContent')} *
               </label>
               <textarea
                 placeholder="Share your thoughts about this project..."
@@ -234,9 +236,9 @@ export function ProjectComments({ projectId }: ProjectCommentsProps) {
               }}
             >
               {submitting ? (
-                <><Loader2 size={14} className="animate-spin" /> Posting...</>
+                <><Loader2 size={14} className="animate-spin" /> {t('commentsPosting')}</>
               ) : (
-                <><Send size={14} /> Post Comment</>
+                <><Send size={14} /> {t('commentsSubmit')}</>
               )}
             </motion.button>
           </motion.form>
@@ -255,7 +257,7 @@ export function ProjectComments({ projectId }: ProjectCommentsProps) {
         >
           <MessageCircle size={32} className="mx-auto mb-3 opacity-30" style={{ color: 'var(--muted)' }} />
           <p className="text-sm" style={{ color: 'var(--muted)' }}>
-            No comments yet. Be the first to comment!
+            {t('commentsEmpty')}
           </p>
         </div>
       ) : (

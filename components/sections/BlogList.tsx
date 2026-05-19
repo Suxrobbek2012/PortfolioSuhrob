@@ -5,12 +5,15 @@ import Link from 'next/link'
 import { Calendar, Clock, Tag, ArrowRight } from 'lucide-react'
 import { formatDate, safeHref } from '@/lib/utils'
 import type { BlogPost } from '@/lib/mdx'
+import { useTranslations } from '@/hooks/useTranslations'
 
-export function BlogList({ posts }: { posts: BlogPost[] }) {
+export function BlogList({ posts }: { posts: import('@/lib/mdx').BlogPost[] }) {
+  const { t } = useTranslations()
+
   if (posts.length === 0) {
     return (
       <div className="text-center py-20" style={{ color: 'var(--muted)' }}>
-        <p className="text-lg">No posts yet. Check back soon!</p>
+        <p className="text-lg">{t('blogNoPosts')}</p>
       </div>
     )
   }
@@ -79,14 +82,14 @@ export function BlogList({ posts }: { posts: BlogPost[] }) {
                   </span>
                   <span className="flex items-center gap-1">
                     <Clock size={12} />
-                    {post.readTime} min read
+                    {post.readTime} {t('blogMinRead')}
                   </span>
                 </div>
                 <span
                   className="flex items-center gap-1 font-medium transition-colors group-hover:text-[var(--accent)]"
                   style={{ color: 'var(--muted)' }}
                 >
-                  Read more <ArrowRight size={12} />
+                  {t('blogReadMore')} <ArrowRight size={12} />
                 </span>
               </div>
             </div>

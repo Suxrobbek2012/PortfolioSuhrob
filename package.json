@@ -13,7 +13,7 @@
   },
   "dependencies": {
     "@auth/prisma-adapter": "^1.6.0",
-    "@prisma/client": "^5.14.0",
+    "@prisma/client": "^5.22.0",
     "@react-three/drei": "^9.105.6",
     "@react-three/fiber": "^8.16.8",
     "@types/bcryptjs": "^2.4.6",

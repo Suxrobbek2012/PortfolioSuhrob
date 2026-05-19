@@ -135,9 +135,15 @@ async function main() {
   // ─── SETTINGS ───────────────────────────────────────────
   const settings = [
     { key: 'name', value: 'Suhrobbek Baxtiyorov' },
-    { key: 'title', value: 'Full Stack Developer & UI/UX Designer' },
-    { key: 'bio', value: 'I build fast, beautiful, and scalable web applications. Passionate about clean code and stunning user interfaces.' },
-    { key: 'location', value: 'Tashkent, Uzbekistan' },
+    { key: 'title_en', value: 'Full Stack Developer & UI/UX Designer' },
+    { key: 'title_uz', value: 'Full Stack dasturchi va UI/UX dizayner' },
+    { key: 'title_ru', value: 'Full Stack разработчик и UI/UX дизайнер' },
+    { key: 'bio_en', value: 'I build fast, beautiful, and scalable web applications. Passionate about clean code and stunning user interfaces.' },
+    { key: 'bio_uz', value: 'Tez, chiroyli va kengaytiriladigan veb-ilovalar yarataman. Toza kod va zoʻr interfeyslarga ishtiyoqliman.' },
+    { key: 'bio_ru', value: 'Создаю быстрые, красивые и масштабируемые веб-приложения. Увлечён чистым кодом и сильными интерфейсами.' },
+    { key: 'location_en', value: 'Tashkent, Uzbekistan' },
+    { key: 'location_uz', value: "Toshkent, O'zbekiston" },
+    { key: 'location_ru', value: 'Ташкент, Узбекистан' },
     { key: 'email', value: 'suhrobbek@portfolio.dev' },
     { key: 'github', value: 'https://github.com/suhrobbek' },
     { key: 'linkedin', value: 'https://linkedin.com/in/suhrobbek' },

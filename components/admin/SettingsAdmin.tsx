@@ -7,9 +7,6 @@ import toast from 'react-hot-toast'
 
 const FIELDS = [
   { key: 'name', label: 'Full Name', type: 'text', placeholder: 'Suhrobbek Baxtiyorov' },
-  { key: 'title', label: 'Job Title', type: 'text', placeholder: 'Full Stack Developer & UI/UX Designer' },
-  { key: 'bio', label: 'Bio / About', type: 'textarea', placeholder: 'Tell visitors about yourself...' },
-  { key: 'location', label: 'Location', type: 'text', placeholder: 'Tashkent, Uzbekistan' },
   { key: 'email', label: 'Email', type: 'email', placeholder: 'you@example.com' },
   { key: 'github', label: 'GitHub URL', type: 'url', placeholder: 'https://github.com/username' },
   { key: 'linkedin', label: 'LinkedIn URL', type: 'url', placeholder: 'https://linkedin.com/in/username' },
@@ -19,6 +16,18 @@ const FIELDS = [
   { key: 'projectsCompleted', label: 'Projects Completed', type: 'number', placeholder: '50' },
   { key: 'happyClients', label: 'Happy Clients', type: 'number', placeholder: '30' },
   { key: 'coffeeConsumed', label: 'Coffee Consumed', type: 'number', placeholder: '1000' },
+]
+
+const MULTILANG_FIELDS = [
+  { key: 'title', label: 'Job Title', type: 'text' as const },
+  { key: 'bio', label: 'Bio / About', type: 'textarea' as const },
+  { key: 'location', label: 'Location', type: 'text' as const },
+]
+
+const CONTENT_LANGS = [
+  { id: 'uz', label: 'Ўзбек (UZ)' },
+  { id: 'ru', label: 'Русский (RU)' },
+  { id: 'en', label: 'English (EN)' },
 ]
 
 type SaveStatus = 'idle' | 'saving' | 'success' | 'error'
@@ -174,6 +183,65 @@ export function SettingsAdmin({ settings: initial }: { settings: Record<string, 
               )}
             </div>
           ))}
+
+          <div
+            className="pt-4 mt-2"
+            style={{ borderTop: '1px solid var(--border)' }}
+          >
+            <h3 className="font-bold mb-1" style={{ color: 'var(--foreground)' }}>
+              Multilingual content (UZ / RU / EN)
+            </h3>
+            <p className="text-xs mb-5" style={{ color: 'var(--muted)' }}>
+              These fields change on the public site when visitors switch language.
+            </p>
+
+            {MULTILANG_FIELDS.map(({ key, label, type }) => (
+              <div key={key} className="mb-6">
+                <p
+                  className="text-xs font-semibold mb-3 uppercase tracking-wider"
+                  style={{ color: 'var(--accent)' }}
+                >
+                  {label}
+                </p>
+                <div className="flex flex-col gap-3">
+                  {CONTENT_LANGS.map(({ id, label: langLabel }) => {
+                    const fieldKey = `${key}_${id}`
+                    return (
+                      <div key={fieldKey}>
+                        <label
+                          className="block text-xs font-medium mb-1.5"
+                          style={{ color: 'var(--muted)' }}
+                        >
+                          {langLabel}
+                        </label>
+                        {type === 'textarea' ? (
+                          <textarea
+                            style={{ ...inputBase, resize: 'none' } as React.CSSProperties}
+                            rows={3}
+                            placeholder={label}
+                            value={settings[fieldKey] || ''}
+                            onChange={(e) => handleChange(fieldKey, e.target.value)}
+                            onFocus={(e) => (e.currentTarget.style.borderColor = 'var(--accent)')}
+                            onBlur={(e) => (e.currentTarget.style.borderColor = 'var(--border)')}
+                          />
+                        ) : (
+                          <input
+                            type="text"
+                            style={inputBase as React.CSSProperties}
+                            placeholder={label}
+                            value={settings[fieldKey] || ''}
+                            onChange={(e) => handleChange(fieldKey, e.target.value)}
+                            onFocus={(e) => (e.currentTarget.style.borderColor = 'var(--accent)')}
+                            onBlur={(e) => (e.currentTarget.style.borderColor = 'var(--border)')}
+                          />
+                        )}
+                      </div>
+                    )
+                  })}
+                </div>
+              </div>
+            ))}
+          </div>
         </div>
 
         {/* Footer save button */}
